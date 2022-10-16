@@ -1,7 +1,8 @@
 import useResizeObserver from "../../hooks";
-import mapjson from "../../assets/gadm41_ESP_TOPO.json";
+import autonomusRegions from "../../assets/gadm41_ESP_TOPO.json";
+import provinces from "../../assets/gadm41_ESP_2_TOPO.json";
 import { useState, useEffect, useRef } from "react";
-import { select, geoPath, geoMercator, schemeGnBu } from "d3";
+import { select, geoPath, geoMercator } from "d3";
 import * as topojson from "topojson";
 import "./Map.css";
 
@@ -12,7 +13,7 @@ const Map = () => {
   const [geoData, setGeoData] = useState(null);
 
   useEffect(() => {
-    setGeoData(topojson.feature(mapjson, mapjson.objects.gadm41_ESP_1));
+    setGeoData(topojson.feature(provinces, provinces.objects.adminRegions));
   }, []);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const Map = () => {
         select(this)
           .style("fill", "gray")
           .transition(500)
-          .style("transform", "translateX(10px)");
+          .style("transform", "translateX(0px)");
       });
   }, [geoData, dimensions]);
 

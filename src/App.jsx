@@ -6,6 +6,8 @@ import Map from "./components/Map";
 function App() {
   const [count, setCount] = useState(0);
 
+  // fetch data from free weather API for Spain
+
   return (
     <div className="App">
       <Map />
