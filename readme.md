@@ -18,4 +18,4 @@ open the browser on the port indicated at the console and you are set.
 
 This is an exercise demonstrating a d3-map that adapts to the size of its container.
 
-It also showcases animated highlighting of regions on hover.
+It also showcases animated highlighting of regions on hover as well as focusing on part of the svg content via the viewBox attribute.
