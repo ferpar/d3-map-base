@@ -41,6 +41,16 @@ const Map = () => {
       .attr("stroke", "white");
   }, [data, dimensions]);
 
+  const viewBoxCoords = ({ width, height }) => {
+    const coefs = [0.3, 0, 0.8, 0.6];
+    return `
+          ${width * coefs[0]} 
+          ${height * coefs[1]} 
+          ${width * coefs[2]} 
+          ${height * coefs[3]}
+    `;
+  };
+
   return (
     <div
       ref={wrapperRef}
@@ -51,11 +61,7 @@ const Map = () => {
         <svg
           className="mapCanvas"
           ref={svgRef}
-          viewBox={`
-          ${dimensions.width / 4} 
-          ${dimensions.height * 0.2} 
-          ${dimensions.width} 
-          ${dimensions.height * 0.4}`}
+          viewBox={viewBoxCoords(dimensions)}
         ></svg>
       ) : (
         <p>loading....</p>
