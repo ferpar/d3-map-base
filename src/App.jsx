@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Map />
-      <p>Test </p>
+      <p>Basic Map</p>
     </div>
   );
 }

@@ -9,14 +9,14 @@ const Map = () => {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  const [data, setData] = useState(null);
+  const [geoData, setGeoData] = useState(null);
 
   useEffect(() => {
-    setData(topojson.feature(mapjson, mapjson.objects.gadm41_ESP_1));
+    setGeoData(topojson.feature(mapjson, mapjson.objects.gadm41_ESP_1));
   }, []);
 
   useEffect(() => {
-    if (!data) return;
+    if (!geoData) return;
     if (!dimensions) return;
 
     const { width, height } = dimensions;
@@ -24,23 +24,30 @@ const Map = () => {
     const svg = select(svgRef.current);
 
     const projection = geoMercator()
-      .fitSize([width, height], data)
+      .fitSize([width, height], geoData)
       .precision(100);
 
     const pathGenerator = geoPath().projection(projection);
 
-    svg
-      .selectAll(".country")
-      .data(data.features)
+    const regions = svg
+      .selectAll(".administrative-region")
+      .data(geoData.features)
       .join("path")
-      .attr("class", "country")
-      .transition()
-      .duration(500)
+      .attr("class", "administrative-region")
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
-      .attr("stroke", "white");
-  }, [data, dimensions]);
+      .attr("stroke", "white")
+      .on("mouseover", function (event, d) {
+        select(this).attr("fill", "red");
+      })
+      .on("mouseout", function (event, d) {
+        select(this).attr("fill", "gray");
+      });
 
+    console.log(regions);
+  }, [geoData, dimensions]);
+
+  // function to
   const viewBoxCoords = ({ width, height }) => {
     const coefs = [0.3, 0, 0.8, 0.6];
     return `
@@ -54,7 +61,7 @@ const Map = () => {
   return (
     <div
       ref={wrapperRef}
-      style={{ marginBottom: "2rem" }}
+      style={{ marginBottom: "2rem", transform: "skewX(-10deg)" }}
       className="mapWrapper"
     >
       {dimensions ? (
