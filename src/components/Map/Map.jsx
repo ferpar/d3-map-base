@@ -23,6 +23,11 @@ const Map = () => {
     const { width, height } = dimensions;
 
     const svg = select(svgRef.current);
+    const regionContainer = svg
+      .selectAll(".regionContainer")
+      .data(["region container"])
+      .join("g")
+      .attr("class", "regionContainer");
 
     const projection = geoMercator()
       .fitSize([width, height], geoData)
@@ -32,7 +37,7 @@ const Map = () => {
 
     console.log(geoData);
 
-    const regions = svg
+    const regions = regionContainer
       .selectAll(".administrativeRegion")
       .data(geoData.features)
       .join("path")
@@ -41,7 +46,7 @@ const Map = () => {
       .attr("fill", "gray")
       .attr("stroke", "white")
       .on("mouseover", async function (event, d) {
-        window.document.querySelector("svg").appendChild(this);
+        window.document.querySelector(".regionContainer").appendChild(this);
         select(this)
           .style("fill", "red")
           .transition(500)
