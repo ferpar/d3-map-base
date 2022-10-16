@@ -51,8 +51,6 @@ const Map = () => {
         <svg
           className="mapCanvas"
           ref={svgRef}
-          // width={dimensions.width}
-          // height={dimensions.height}
           viewBox={`
           ${dimensions.width / 4} 
           ${dimensions.height * 0.2} 
