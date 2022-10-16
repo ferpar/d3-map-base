@@ -3,10 +3,14 @@
 ## Setup Instructions
 
 on the first run
-```npm install && npm run dev
+```
+npm install && npm run dev
+```
 
 if already installed
-```npm run dev
+```
+npm run dev
+```
 
 open the browser on the port indicated at the console and you are set.
 
