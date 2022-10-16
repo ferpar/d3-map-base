@@ -29,22 +29,22 @@ const Map = () => {
 
     const pathGenerator = geoPath().projection(projection);
 
+    console.log(geoData);
+
     const regions = svg
-      .selectAll(".administrative-region")
+      .selectAll(".administrativeRegion")
       .data(geoData.features)
       .join("path")
-      .attr("class", "administrative-region")
+      .attr("class", "administrativeRegion")
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
-      .attr("stroke", "white")
-      .on("mouseover", function (event, d) {
-        select(this).attr("fill", "red");
-      })
-      .on("mouseout", function (event, d) {
-        select(this).attr("fill", "gray");
-      });
-
-    console.log(regions);
+      .attr("stroke", "white");
+    // .on("mouseover", function (event, d) {
+    //   select(this).attr("fill", "red");
+    // })
+    // .on("mouseout", function (event, d) {
+    //   select(this).attr("fill", "gray");
+    // });
   }, [geoData, dimensions]);
 
   // function to
