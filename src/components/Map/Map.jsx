@@ -1,7 +1,7 @@
 import useResizeObserver from "../../hooks";
 import mapjson from "../../assets/gadm41_ESP_TOPO.json";
 import { useState, useEffect, useRef } from "react";
-import { select, geoPath, geoMercator } from "d3";
+import { select, geoPath, geoMercator, schemeGnBu } from "d3";
 import * as topojson from "topojson";
 import "./Map.css";
 
@@ -38,13 +38,20 @@ const Map = () => {
       .attr("class", "administrativeRegion")
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
-      .attr("stroke", "white");
-    // .on("mouseover", function (event, d) {
-    //   select(this).attr("fill", "red");
-    // })
-    // .on("mouseout", function (event, d) {
-    //   select(this).attr("fill", "gray");
-    // });
+      .attr("stroke", "white")
+      .on("mouseover", async function (event, d) {
+        window.document.querySelector("svg").appendChild(this);
+        select(this)
+          .style("fill", "red")
+          .transition(500)
+          .style("transform", "translateX(-10px)");
+      })
+      .on("mouseout", function (event, d) {
+        select(this)
+          .style("fill", "gray")
+          .transition(500)
+          .style("transform", "translateX(10px)");
+      });
   }, [geoData, dimensions]);
 
   // function to
