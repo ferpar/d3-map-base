@@ -11,8 +11,6 @@ const Map = () => {
   const dimensions = useResizeObserver(wrapperRef);
   const [data, setData] = useState(null);
 
-  console.log(data);
-
   useEffect(() => {
     setData(topojson.feature(mapjson, mapjson.objects.gadm41_ESP_1));
   }, []);
