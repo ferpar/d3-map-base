@@ -23,6 +23,13 @@ const Map = () => {
     const { width, height } = dimensions;
 
     const svg = select(svgRef.current);
+
+    const underlayRegionContainer = svg
+      .selectAll(".underlayRegionContainer")
+      .data(["underlay region container"])
+      .join("g")
+      .attr("class", "underlayRegionContainer");
+
     const regionContainer = svg
       .selectAll(".regionContainer")
       .data(["region container"])
@@ -41,7 +48,10 @@ const Map = () => {
       .selectAll(".administrativeRegion")
       .data(geoData.features)
       .join("path")
-      .attr("class", "administrativeRegion")
+      .attr(
+        "class",
+        (feature) => `administrativeRegion ${feature.properties.NAME_2}`
+      )
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
       .attr("stroke", "white")
@@ -53,10 +63,28 @@ const Map = () => {
           .style("transform", "translateX(-10px)");
       })
       .on("mouseout", function (event, d) {
-        select(this)
-          .style("fill", "gray")
-          .transition(500)
-          .style("transform", "translateX(0px)");
+        setTimeout(() => {
+          select(this)
+            .style("fill", "gray")
+            .transition(500)
+            .style("transform", "translateX(0px)");
+        }, 1000);
+      });
+
+    const underlayRegions = underlayRegionContainer
+      .selectAll(".underlayRegion")
+      .data(geoData.features)
+      .join("path")
+      .attr("class", "underlayRegion")
+      .attr("d", (feature) => pathGenerator(feature))
+      .attr("fill", "blue")
+      .attr("stroke", "white")
+      .on("mouseover", function (event, d) {
+        console.log({ event, d, name: d.properties.NAME_2 });
+        console.log(select(`.${d.properties.NAME_2}`));
+        select(`.${d.properties.NAME_2}`)
+          .style("fill", "green")
+          .style("transform", "translateX(-10px)");
       });
   }, [geoData, dimensions]);
 
