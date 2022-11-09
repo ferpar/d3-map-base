@@ -45,7 +45,7 @@ const Map = () => {
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
       .attr("stroke", "white")
-      .on("mouseover", async function (event, d) {
+      .on("mouseover", function (event, d) {
         window.document.querySelector(".regionContainer").appendChild(this);
         select(this)
           .style("fill", "red")
