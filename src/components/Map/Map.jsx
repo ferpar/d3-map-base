@@ -2,7 +2,7 @@ import useResizeObserver from "../../hooks";
 import autonomusRegions from "../../assets/gadm41_ESP_TOPO.json";
 import provinces from "../../assets/gadm41_ESP_2_TOPO.json";
 import { useState, useEffect, useRef } from "react";
-import { select, geoPath, geoMercator } from "d3";
+import { select, geoPath, geoMercator, transition } from "d3";
 import * as topojson from "topojson";
 import "./Map.css";
 
@@ -24,17 +24,17 @@ const Map = () => {
 
     const svg = select(svgRef.current);
 
-    const underlayRegionContainer = svg
-      .selectAll(".underlayRegionContainer")
-      .data(["underlay region container"])
-      .join("g")
-      .attr("class", "underlayRegionContainer");
-
     const regionContainer = svg
       .selectAll(".regionContainer")
       .data(["region container"])
       .join("g")
       .attr("class", "regionContainer");
+
+    const overlayRegionContainer = svg
+      .selectAll(".overlayRegionContainer")
+      .data(["overlay region container"])
+      .join("g")
+      .attr("class", "overlayRegionContainer");
 
     const projection = geoMercator()
       .fitSize([width, height], geoData)
@@ -54,37 +54,33 @@ const Map = () => {
       )
       .attr("d", (feature) => pathGenerator(feature))
       .attr("fill", "gray")
-      .attr("stroke", "white")
+      .attr("stroke", "white");
+
+    const overlayRegions = overlayRegionContainer
+      .selectAll(".overlayRegion")
+      .data(geoData.features)
+      .join("path")
+      .attr("class", "overlayRegion")
+      .attr("d", (feature) => pathGenerator(feature))
+      .attr("fill", "transparent")
+      .attr("stroke", "transparent")
       .on("mouseover", function (event, d) {
-        window.document.querySelector(".regionContainer").appendChild(this);
-        select(this)
-          .style("fill", "red")
+        const thisRegion = window.document.querySelector(
+          `.${d.properties.NAME_2}`
+        );
+        window.document
+          .querySelector(".regionContainer")
+          .appendChild(thisRegion);
+        select(`.${d.properties.NAME_2}`)
+          .style("fill", "green")
           .transition(500)
           .style("transform", "translateX(-10px)");
       })
       .on("mouseout", function (event, d) {
-        setTimeout(() => {
-          select(this)
-            .style("fill", "gray")
-            .transition(500)
-            .style("transform", "translateX(0px)");
-        }, 1000);
-      });
-
-    const underlayRegions = underlayRegionContainer
-      .selectAll(".underlayRegion")
-      .data(geoData.features)
-      .join("path")
-      .attr("class", "underlayRegion")
-      .attr("d", (feature) => pathGenerator(feature))
-      .attr("fill", "blue")
-      .attr("stroke", "white")
-      .on("mouseover", function (event, d) {
-        console.log({ event, d, name: d.properties.NAME_2 });
-        console.log(select(`.${d.properties.NAME_2}`));
         select(`.${d.properties.NAME_2}`)
-          .style("fill", "green")
-          .style("transform", "translateX(-10px)");
+          .style("fill", "gray")
+          .transition(500)
+          .style("transform", "translateX(0px)");
       });
   }, [geoData, dimensions]);
 
